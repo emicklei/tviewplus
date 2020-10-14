@@ -1,8 +1,6 @@
 package tviewplus
 
 import (
-	"log"
-
 	"github.com/gdamore/tcell"
 	"github.com/rivo/tview"
 )
@@ -68,7 +66,6 @@ func (f *FocusGroup) HandleDone(w tview.Primitive, k tcell.Key) {
 			f.focusIndex = index - 1
 		}
 	}
-	log.Println(index, len(f.members))
 	// move focus
 	f.app.SetFocus(f.GetFocus())
 }
