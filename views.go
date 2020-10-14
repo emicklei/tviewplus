@@ -30,13 +30,13 @@ func NewInputView(f *FocusGroup, h *StringHolder) *tview.InputField {
 		h.Set(w.GetText())
 		f.HandleDone(w, k)
 	})
-	// h.AddDependent(func(old, new string) {
-	// 	f.GetApplication().QueueUpdate(func() {
-	// 		if w.GetText() != new {
-	// 			w.SetText(new)
-	// 		}
-	// 	})
-	// })
+	h.AddDependent(func(old, new string) {
+		if w.GetText() != new {
+			f.GetApplication().QueueUpdateDraw(func() {
+				w.SetText(new)
+			})
+		}
+	})
 	return w
 }
 

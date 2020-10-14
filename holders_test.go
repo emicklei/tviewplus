@@ -1,6 +1,9 @@
 package tviewplus
 
-import "testing"
+import (
+	"testing"
+	"time"
+)
 
 func TestStringListSelectionHolder_Set(t *testing.T) {
 	h := new(StringListSelectionHolder)
@@ -8,5 +11,10 @@ func TestStringListSelectionHolder_Set(t *testing.T) {
 	h.AddDependent(func(old, new SelectionWithIndex) {
 		caught = new
 	})
-	h.
+	h.setSelection(SelectionWithIndex{Index: 1})
+	// allow the go-routine to complete
+	time.Sleep(10 * time.Millisecond)
+	if caught.Index != 1 {
+		t.Fail()
+	}
 }

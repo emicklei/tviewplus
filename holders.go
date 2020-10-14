@@ -12,6 +12,10 @@ func (s *StringHolder) AddDependent(h StringChangeHandler) {
 	s.dependents = append(s.dependents, h)
 }
 
+func (s *StringHolder) Append(moreValue string) {
+	s.Set(s.Value + moreValue)
+}
+
 func (s *StringHolder) Set(newValue string) {
 	old := s.Value
 	if newValue == old {
