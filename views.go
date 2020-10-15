@@ -24,7 +24,7 @@ func NewTextView(app *tview.Application, h *StringHolder) *tview.TextView {
 
 func NewInputView(f *FocusGroup, h *StringHolder) *tview.InputField {
 	w := tview.NewInputField()
-	w.SetText(h.Value)
+	w.SetText(h.value)
 	f.Add(w)
 	w.SetDoneFunc(func(k tcell.Key) {
 		h.Set(w.GetText())
@@ -42,7 +42,7 @@ func NewInputView(f *FocusGroup, h *StringHolder) *tview.InputField {
 
 func NewDropDownView(f *FocusGroup, h *StringListSelectionHolder) *tview.DropDown {
 	w := tview.NewDropDown()
-	w.SetOptions(h.List, func(text string, index int) {
+	w.SetOptions(h.list, func(text string, index int) {
 		h.setSelection(SelectionWithIndex{Value: text, Index: index})
 	})
 	f.Add(w)
