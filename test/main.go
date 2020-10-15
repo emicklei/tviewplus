@@ -42,6 +42,8 @@ func main() {
 
 	// compose the app
 	app := tview.NewApplication()
+
+	// for cycling through editable views
 	foc := tviewplus.NewFocusGroup(app)
 
 	// editor for Name

@@ -5,6 +5,7 @@ import (
 	"github.com/rivo/tview"
 )
 
+// NewStaticView returns a TextView with dynamic colors enabled.
 func NewStaticView(label string) *tview.TextView {
 	w := tview.NewTextView()
 	w.SetDynamicColors(true)
@@ -12,6 +13,7 @@ func NewStaticView(label string) *tview.TextView {
 	return w
 }
 
+// NewTextView returns a readonly TextView that listens to changes of a StringHolder
 func NewTextView(app *tview.Application, h *StringHolder) *tview.TextView {
 	w := tview.NewTextView()
 	w.SetText(h.value)
@@ -23,6 +25,8 @@ func NewTextView(app *tview.Application, h *StringHolder) *tview.TextView {
 	return w
 }
 
+// NewInputView returns an InputField which listens to changes of a StringHolder
+// and passes the focus to a FocusGroup when exiting the InputField
 func NewInputView(f *FocusGroup, h *StringHolder) *tview.InputField {
 	w := tview.NewInputField()
 	w.SetText(h.value)
@@ -41,12 +45,14 @@ func NewInputView(f *FocusGroup, h *StringHolder) *tview.InputField {
 	return w
 }
 
+// NewDropDownView returns a DropDown which listens to changes of a StringListSelectionHolder
+// and passes the focus to a FocusGroup when exiting the DropDown
 func NewDropDownView(f *FocusGroup, h *StringListSelectionHolder) *tview.DropDown {
 	w := tview.NewDropDown()
 	w.SetOptions(h.list, func(text string, index int) {
 		h.setSelection(SelectionWithIndex{Value: text, Index: index})
 	})
-	w.SetCurrentOption(h.Selection.Index) // -1 means not selection
+	w.SetCurrentOption(h.Selection.Index) // -1 means no selection
 	f.Add(w)
 	w.SetDoneFunc(func(k tcell.Key) {
 		f.HandleDone(w, k)
