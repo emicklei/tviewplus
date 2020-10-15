@@ -27,6 +27,7 @@ func main() {
 	// initial values
 	bin.Name.Set("edit me")
 	bin.List.Set([]string{" choice A ", " choice B ", " choice C "})
+	bin.List.Select(0)
 	bin.Console.Append("Cycle through editable views using Tab,Enter,Escape,Back Tab\n")
 
 	// inter view dependencies

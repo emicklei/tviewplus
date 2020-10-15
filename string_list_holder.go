@@ -13,6 +13,17 @@ type SelectionWithIndex struct {
 	Index int
 }
 
+func (s *StringListSelectionHolder) Select(index int) {
+	if index == -1 {
+		s.setSelection(SelectionWithIndex{Index: -1})
+		return
+	}
+	if index >= len(s.list) {
+		return
+	}
+	s.setSelection(SelectionWithIndex{Value: s.list[index], Index: index})
+}
+
 func (s *StringListSelectionHolder) Set(newValue []string) {
 	if len(s.list) == len(newValue) {
 		same := true
