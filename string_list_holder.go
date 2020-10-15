@@ -30,6 +30,9 @@ func (s *StringListSelectionHolder) Set(newValue []string) {
 }
 
 func (s *StringListSelectionHolder) setSelection(sel SelectionWithIndex) {
+	if s.Selection.Index == sel.Index {
+		return
+	}
 	old := s.Selection
 	for _, each := range s.dependents[:] {
 		// call the handlers in a new go-routine

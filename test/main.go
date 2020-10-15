@@ -23,9 +23,13 @@ func main() {
 		List:    new(tviewplus.StringListSelectionHolder),
 		Console: new(tviewplus.StringHolder),
 	}
-	bin.Name.Set("edit me")
-	bin.List.Set([]string{"choice A", "choice B", "choice C"})
 
+	// initial values
+	bin.Name.Set("edit me")
+	bin.List.Set([]string{" choice A ", " choice B ", " choice C "})
+	bin.Console.Append("Cycle through editable views using Tab,Enter,Escape,Back Tab\n")
+
+	// inter view dependencies
 	bin.Name.AddDependent(func(old, new string) {
 		bin.Console.Append(fmt.Sprintf("Name changed from [%s] to [%s]\n", old, new))
 	})
@@ -35,16 +39,21 @@ func main() {
 		bin.Name.Set(new.Value)
 	})
 
+	// compose the app
 	app := tview.NewApplication()
 	foc := tviewplus.NewFocusGroup(app)
 
+	// editor for Name
 	nameField := tviewplus.NewInputView(foc, bin.Name)
 
+	// editor for List
 	choiceDropdown := tviewplus.NewDropDownView(foc, bin.List)
 
+	// viewer for Console
 	console := tviewplus.NewTextView(app, bin.Console)
 	console.SetBorder(true).SetTitle("console")
 
+	// layout
 	flex := tview.NewFlex().SetDirection(tview.FlexRow).
 		AddItem(tviewplus.NewStaticView(" [gray]InputView"), 1, 1, false).
 		AddItem(nameField, 1, 1, false).

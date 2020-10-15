@@ -14,6 +14,7 @@ func NewStaticView(label string) *tview.TextView {
 
 func NewTextView(app *tview.Application, h *StringHolder) *tview.TextView {
 	w := tview.NewTextView()
+	w.SetText(h.value)
 	h.AddDependent(func(old, new string) {
 		app.QueueUpdateDraw(func() {
 			w.SetText(new)
@@ -45,6 +46,7 @@ func NewDropDownView(f *FocusGroup, h *StringListSelectionHolder) *tview.DropDow
 	w.SetOptions(h.list, func(text string, index int) {
 		h.setSelection(SelectionWithIndex{Value: text, Index: index})
 	})
+	w.SetCurrentOption(h.Selection.Index) // -1 means not selection
 	f.Add(w)
 	w.SetDoneFunc(func(k tcell.Key) {
 		f.HandleDone(w, k)
