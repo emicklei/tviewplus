@@ -1,11 +1,17 @@
 package tviewplus
 
+import "io"
+
 type StringChangeHandler func(old, new string)
 type SelectionChangeHandler func(old, new SelectionWithIndex)
 
 type StringHolder struct {
 	Value      string
 	dependents []StringChangeHandler
+}
+
+func (s *StringHolder) AsWriter() io.Writer {
+	return WriterStringHolderAdaptor{target: s}
 }
 
 func (s *StringHolder) AddDependent(h StringChangeHandler) {
@@ -76,6 +82,6 @@ type WriterStringHolderAdaptor struct {
 
 // Write is part of io.Writer
 func (w WriterStringHolderAdaptor) Write(data []byte) (int, error) {
-	w.target.Set(w.target.Value + string(data))
+	w.target.Append(string(data))
 	return len(data), nil
 }
