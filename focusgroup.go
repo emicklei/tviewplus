@@ -29,6 +29,9 @@ func (f *FocusGroup) GetFocus() tview.Primitive {
 	if len(f.members) == 0 {
 		return nil
 	}
+	if f.focusIndex == -1 {
+		return nil
+	}
 	return f.members[f.focusIndex]
 }
 
@@ -59,6 +62,11 @@ func (f *FocusGroup) HandleDone(w tview.Primitive, k tcell.Key) {
 		} else {
 			f.focusIndex = index + 1
 		}
+	case tcell.KeyEscape:
+		f.focusIndex = -1
+		f.app.SetFocus(nil)
+		return
+
 	case tcell.KeyBacktab:
 		if index == 0 {
 			f.focusIndex = len(f.members) - 1

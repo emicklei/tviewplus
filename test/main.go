@@ -48,23 +48,26 @@ func main() {
 
 	// editor for Name
 	nameField := tviewplus.NewInputView(foc, bin.Name)
+	nameFieldLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]InputView")
 
 	// editor for List
 	choiceDropdown := tviewplus.NewDropDownView(foc, bin.List)
+	choiceDropdownLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]DropDownView")
 
 	// viewer for Console
-	console := tviewplus.NewTextView(app, bin.Console)
+	console := tviewplus.NewReadOnlyTextView(app, bin.Console)
 	console.SetBorder(true).SetTitle("console")
+	consoleLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]TextView")
 
 	// layout
 	flex := tview.NewFlex().SetDirection(tview.FlexRow).
-		AddItem(tviewplus.NewStaticView(" [gray]InputView"), 1, 1, false).
+		AddItem(nameFieldLabel, 1, 1, false).
 		AddItem(nameField, 1, 1, false).
 		AddItem(tview.NewBox().SetBorderPadding(1, 0, 0, 0), 1, 1, false).
-		AddItem(tviewplus.NewStaticView(" [gray]DropDownView"), 1, 1, false).
+		AddItem(choiceDropdownLabel, 1, 1, false).
 		AddItem(choiceDropdown, 1, 1, false).
 		AddItem(tview.NewBox().SetBorderPadding(1, 0, 0, 0), 1, 1, false).
-		AddItem(tviewplus.NewStaticView(" [gray]TextView"), 1, 1, false).
+		AddItem(consoleLabel, 1, 1, false).
 		AddItem(console, 10, 1, false)
 
 	if err := app.SetRoot(flex, true).SetFocus(foc.GetFocus()).EnableMouse(true).Run(); err != nil {

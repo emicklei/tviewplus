@@ -5,16 +5,8 @@ import (
 	"github.com/rivo/tview"
 )
 
-// NewStaticView returns a TextView with dynamic colors enabled.
-func NewStaticView(label string) *tview.TextView {
-	w := tview.NewTextView()
-	w.SetDynamicColors(true)
-	w.SetText(label)
-	return w
-}
-
-// NewTextView returns a readonly TextView that listens to changes of a StringHolder
-func NewTextView(app *tview.Application, h *StringHolder) *tview.TextView {
+// NewReadOnlyTextView returns a readonly TextView that listens to changes of a StringHolder
+func NewReadOnlyTextView(app *tview.Application, h *StringHolder) *tview.TextView {
 	w := tview.NewTextView()
 	w.SetText(h.value)
 	h.AddDependent(func(old, new string) {
