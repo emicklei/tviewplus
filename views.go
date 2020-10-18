@@ -51,3 +51,21 @@ func NewDropDownView(f *FocusGroup, h *StringListSelectionHolder) *tview.DropDow
 	})
 	return w
 }
+
+func NewButtonView(f *FocusGroup) *tview.Button {
+	w := tview.NewButton("") // set label later
+	f.Add(w)
+	w.SetBlurFunc(func(k tcell.Key) {
+		f.HandleDone(w, k)
+	})
+	return w
+}
+
+func NewCheckboxView(f *FocusGroup) *tview.Checkbox {
+	w := tview.NewCheckbox()
+	f.Add(w)
+	w.SetDoneFunc(func(k tcell.Key) {
+		f.HandleDone(w, k)
+	})
+	return w
+}

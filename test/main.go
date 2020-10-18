@@ -54,9 +54,23 @@ func main() {
 	choiceDropdown := tviewplus.NewDropDownView(foc, bin.List)
 	choiceDropdownLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]DropDownView")
 
+	// button
+	button := tviewplus.NewButtonView(foc).SetLabel("OK")
+	button.SetSelectedFunc(func() {
+		bin.Console.Append(fmt.Sprintf("Button OK clicked\n"))
+	})
+	buttonLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]ButtonView")
+
+	// checkbox
+	checkbox := tviewplus.NewCheckboxView(foc).SetLabel("Tick me")
+	checkbox.SetChangedFunc(func(checked bool) {
+		bin.Console.Append(fmt.Sprintf("Checkbox clicked:%v\n", checked))
+	})
+	checkboxLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]CheckboxView")
+
 	// viewer for Console
 	console := tviewplus.NewReadOnlyTextView(app, bin.Console)
-	console.SetBorder(true).SetTitle("console")
+	console.SetBorder(true).SetTitle("log")
 	consoleLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]TextView")
 
 	// layout
@@ -66,6 +80,12 @@ func main() {
 		AddItem(tview.NewBox().SetBorderPadding(1, 0, 0, 0), 1, 1, false).
 		AddItem(choiceDropdownLabel, 1, 1, false).
 		AddItem(choiceDropdown, 1, 1, false).
+		AddItem(tview.NewBox().SetBorderPadding(1, 0, 0, 0), 1, 1, false).
+		AddItem(buttonLabel, 1, 1, false).
+		AddItem(button, 1, 1, false).
+		AddItem(tview.NewBox().SetBorderPadding(1, 0, 0, 0), 1, 1, false).
+		AddItem(checkboxLabel, 1, 1, false).
+		AddItem(checkbox, 1, 1, false).
 		AddItem(tview.NewBox().SetBorderPadding(1, 0, 0, 0), 1, 1, false).
 		AddItem(consoleLabel, 1, 1, false).
 		AddItem(console, 10, 1, false)
