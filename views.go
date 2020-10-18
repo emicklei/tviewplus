@@ -61,9 +61,13 @@ func NewButtonView(f *FocusGroup) *tview.Button {
 	return w
 }
 
-func NewCheckboxView(f *FocusGroup) *tview.Checkbox {
+func NewCheckboxView(f *FocusGroup, h *BoolHolder) *tview.Checkbox {
 	w := tview.NewCheckbox()
+	w.SetChecked(h.Get())
 	f.Add(w)
+	w.SetChangedFunc(func(checked bool) {
+		h.Set(checked)
+	})
 	w.SetDoneFunc(func(k tcell.Key) {
 		f.HandleDone(w, k)
 	})

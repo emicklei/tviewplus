@@ -14,6 +14,7 @@ import (
 type Bindings struct {
 	Name    *tviewplus.StringHolder
 	List    *tviewplus.StringListSelectionHolder
+	Checked *tviewplus.BoolHolder
 	Console *tviewplus.StringHolder
 }
 
@@ -21,6 +22,7 @@ func main() {
 	bin := &Bindings{
 		Name:    new(tviewplus.StringHolder),
 		List:    new(tviewplus.StringListSelectionHolder),
+		Checked: new(tviewplus.BoolHolder),
 		Console: new(tviewplus.StringHolder),
 	}
 
@@ -38,6 +40,10 @@ func main() {
 	bin.List.AddDependent(func(old, new tviewplus.SelectionWithIndex) {
 		bin.Console.Append(fmt.Sprintf("Dropdown selection changed from [%v] to [%v]\n", old, new))
 		bin.Name.Set(new.Value)
+	})
+
+	bin.Checked.AddDependent(func(old, new bool) {
+		bin.Console.Append(fmt.Sprintf("Checkbox clicked:%v\n", new))
 	})
 
 	// compose the app
@@ -62,10 +68,7 @@ func main() {
 	buttonLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]ButtonView")
 
 	// checkbox
-	checkbox := tviewplus.NewCheckboxView(foc).SetLabel("Tick me")
-	checkbox.SetChangedFunc(func(checked bool) {
-		bin.Console.Append(fmt.Sprintf("Checkbox clicked:%v\n", checked))
-	})
+	checkbox := tviewplus.NewCheckboxView(foc, bin.Checked).SetLabel("Tick me ")
 	checkboxLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]CheckboxView")
 
 	// viewer for Console
