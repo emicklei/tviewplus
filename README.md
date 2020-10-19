@@ -10,5 +10,8 @@ See test folder for a screenshot and sample program using all extensions.
 - StringHolder
 - StringListSelectionHolder
 
+## test screenshot
+
+![test.png](test.png)
 
 &copy; 2020 <a href="http://ernestmicklei.com">ernestmicklei.com</a>
