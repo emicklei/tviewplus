@@ -9,6 +9,7 @@ See test folder for a screenshot and sample program using all extensions.
 - FocusGroup
 - StringHolder
 - StringListSelectionHolder
+- BoolHolder
 
 ## test screenshot
 
