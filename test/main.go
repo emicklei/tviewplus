@@ -53,28 +53,30 @@ func main() {
 	foc := tviewplus.NewFocusGroup(app)
 
 	// editor for Name
-	nameField := tviewplus.NewInputView(foc, bin.Name)
-	nameFieldLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]InputView")
+	nameField := tviewplus.NewInputView(foc, bin.Name).SetFieldWidth(16)
+	nameFieldLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]InputField with StringHolder")
 
 	// editor for List
 	choiceDropdown := tviewplus.NewDropDownView(foc, bin.List)
-	choiceDropdownLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]DropDownView")
+	choiceDropdown.SetTextOptions("", "", "", "▼", "---")
+	choiceDropdownLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]DropDown with StringListSelectionHolder")
 
 	// button
 	button := tviewplus.NewButtonView(foc).SetLabel("OK")
 	button.SetSelectedFunc(func() {
 		bin.Console.Append(fmt.Sprintf("Button OK clicked\n"))
 	})
-	buttonLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]ButtonView")
+	buttonLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]Button")
 
-	// checkbox
+	// checkbox ✓
 	checkbox := tviewplus.NewCheckboxView(foc, bin.Checked).SetLabel("Tick me ")
-	checkboxLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]CheckboxView")
+	//checkbox.SetCheckedRune('✓'), no such method
+	checkboxLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]Checkbox with BoolHolder")
 
 	// viewer for Console
 	console := tviewplus.NewReadOnlyTextView(app, bin.Console)
 	console.SetBorder(true).SetTitle("log")
-	consoleLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]TextView")
+	consoleLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]TextView with StringHolder")
 
 	// layout
 	flex := tview.NewFlex().SetDirection(tview.FlexRow).
