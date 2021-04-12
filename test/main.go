@@ -37,7 +37,7 @@ func main() {
 		bin.Console.Append(fmt.Sprintf("Name changed from [%s] to [%s]\n", old, new))
 	})
 
-	bin.List.AddDependent(func(old, new tviewplus.SelectionWithIndex) {
+	bin.List.AddSelectionChangeDependent(func(old, new tviewplus.SelectionWithIndex) {
 		bin.Console.Append(fmt.Sprintf("Dropdown selection changed from [%v] to [%v]\n", old, new))
 		bin.Name.Set(new.Value)
 	})

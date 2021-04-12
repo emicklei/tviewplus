@@ -49,6 +49,11 @@ func NewDropDownView(f *FocusGroup, h *StringListSelectionHolder) *tview.DropDow
 	w.SetDoneFunc(func(k tcell.Key) {
 		f.HandleDone(w, k)
 	})
+	h.AddListChangeDependent(func(old, new []string) {
+		w.SetOptions(new, func(text string, index int) {
+			h.setSelection(SelectionWithIndex{Value: text, Index: index})
+		})
+	})
 	return w
 }
 
