@@ -53,6 +53,7 @@ func NewDropDownView(f *FocusGroup, h *StringListSelectionHolder) *tview.DropDow
 		w.SetOptions(new, func(text string, index int) {
 			h.setSelection(SelectionWithIndex{Value: text, Index: index})
 		})
+		f.GetApplication().QueueUpdateDraw(func() {})
 	})
 	return w
 }
@@ -100,6 +101,7 @@ func NewListView(f *FocusGroup, h *StringListSelectionHolder) *tview.List {
 				h.setSelection(SelectionWithIndex{Value: itemEach, Index: itemIndex})
 			})
 		}
+		f.GetApplication().QueueUpdateDraw(func() {})
 	})
 	w.SetDoneFunc(func() {
 		f.HandleDone(w, tcell.KeyEscape)

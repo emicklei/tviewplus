@@ -34,7 +34,6 @@ func main() {
 	bin.Choices.Set([]string{" choice A ", " choice B ", " choice C "})
 	bin.Choices.Select(0)
 	bin.Console.Append("Cycle through editable views using Tab,Enter,Escape,Back Tab\n")
-	bin.List.Set([]string{"item 1", "item 2", "item 3"})
 
 	// inter view dependencies
 	bin.Name.AddDependent(func(old, new string) {
@@ -113,6 +112,10 @@ func main() {
 	tview.Styles.PrimaryTextColor = tcell.ColorWhite
 	tview.Styles.ContrastBackgroundColor = tcell.ColorBlue
 	tview.Styles.PrimitiveBackgroundColor = tcell.ColorBlack
+
+	go func() {
+		bin.List.Set([]string{"item 1", "item 2", "item 3"})
+	}()
 
 	if err := app.SetRoot(flex, true).SetFocus(foc.GetFocus()).EnableMouse(true).Run(); err != nil {
 		log.Println(err)
