@@ -78,3 +78,31 @@ func NewCheckboxView(f *FocusGroup, h *BoolHolder) *tview.Checkbox {
 	})
 	return w
 }
+
+func NewListView(f *FocusGroup, h *StringListSelectionHolder) *tview.List {
+	w := tview.NewList()
+	w.ShowSecondaryText(false)
+	// initial fill
+	for i, each := range h.list {
+		itemEach := each
+		itemIndex := i
+		w.AddItem(each, "", 0, func() {
+			h.setSelection(SelectionWithIndex{Value: itemEach, Index: itemIndex})
+		})
+	}
+	f.Add(w)
+	h.AddListChangeDependent(func(old, new []string) {
+		w.Clear()
+		for i, each := range new {
+			itemEach := each
+			itemIndex := i
+			w.AddItem(each, "", 0, func() {
+				h.setSelection(SelectionWithIndex{Value: itemEach, Index: itemIndex})
+			})
+		}
+	})
+	w.SetDoneFunc(func() {
+		f.HandleDone(w, tcell.KeyEscape)
+	})
+	return w
+}

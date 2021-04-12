@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/emicklei/tviewplus"
+	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )
 
@@ -14,6 +15,7 @@ import (
 type Bindings struct {
 	Name    *tviewplus.StringHolder
 	List    *tviewplus.StringListSelectionHolder
+	Choices *tviewplus.StringListSelectionHolder
 	Checked *tviewplus.BoolHolder
 	Console *tviewplus.StringHolder
 }
@@ -22,24 +24,30 @@ func main() {
 	bin := &Bindings{
 		Name:    new(tviewplus.StringHolder),
 		List:    new(tviewplus.StringListSelectionHolder),
+		Choices: new(tviewplus.StringListSelectionHolder),
 		Checked: new(tviewplus.BoolHolder),
 		Console: new(tviewplus.StringHolder),
 	}
 
 	// initial values
 	bin.Name.Set("edit me")
-	bin.List.Set([]string{" choice A ", " choice B ", " choice C "})
-	bin.List.Select(0)
+	bin.Choices.Set([]string{" choice A ", " choice B ", " choice C "})
+	bin.Choices.Select(0)
 	bin.Console.Append("Cycle through editable views using Tab,Enter,Escape,Back Tab\n")
+	bin.List.Set([]string{"item 1", "item 2", "item 3"})
 
 	// inter view dependencies
 	bin.Name.AddDependent(func(old, new string) {
 		bin.Console.Append(fmt.Sprintf("Name changed from [%s] to [%s]\n", old, new))
 	})
 
-	bin.List.AddSelectionChangeDependent(func(old, new tviewplus.SelectionWithIndex) {
+	bin.Choices.AddSelectionChangeDependent(func(old, new tviewplus.SelectionWithIndex) {
 		bin.Console.Append(fmt.Sprintf("Dropdown selection changed from [%v] to [%v]\n", old, new))
 		bin.Name.Set(new.Value)
+	})
+
+	bin.List.AddSelectionChangeDependent(func(old, new tviewplus.SelectionWithIndex) {
+		bin.Console.Append(fmt.Sprintf("List selection changed from [%v] to [%v]\n", old, new))
 	})
 
 	bin.Checked.AddDependent(func(old, new bool) {
@@ -56,10 +64,14 @@ func main() {
 	nameField := tviewplus.NewInputView(foc, bin.Name).SetFieldWidth(16)
 	nameFieldLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]InputField with StringHolder")
 
-	// editor for List
-	choiceDropdown := tviewplus.NewDropDownView(foc, bin.List)
+	// editor for DropDown
+	choiceDropdown := tviewplus.NewDropDownView(foc, bin.Choices)
 	choiceDropdown.SetTextOptions("", "", "", "▼", "---")
 	choiceDropdownLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]DropDown with StringListSelectionHolder")
+
+	// readonly List
+	showList := tviewplus.NewListView(foc, bin.List)
+	showListLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]List with StringListSelectionHolder")
 
 	// button
 	button := tviewplus.NewButtonView(foc).SetLabel("OK")
@@ -70,7 +82,7 @@ func main() {
 
 	// checkbox ✓
 	checkbox := tviewplus.NewCheckboxView(foc, bin.Checked).SetLabel("Tick me ")
-	//checkbox.SetCheckedRune('✓'), no such method
+	checkbox.SetCheckedString("✓")
 	checkboxLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]Checkbox with BoolHolder")
 
 	// viewer for Console
@@ -86,6 +98,9 @@ func main() {
 		AddItem(choiceDropdownLabel, 1, 1, false).
 		AddItem(choiceDropdown, 1, 1, false).
 		AddItem(tview.NewBox().SetBorderPadding(1, 0, 0, 0), 1, 1, false).
+		AddItem(showListLabel, 1, 1, false).
+		AddItem(showList, 4, 1, false).
+		AddItem(tview.NewBox().SetBorderPadding(1, 0, 0, 0), 1, 1, false).
 		AddItem(buttonLabel, 1, 1, false).
 		AddItem(button, 1, 1, false).
 		AddItem(tview.NewBox().SetBorderPadding(1, 0, 0, 0), 1, 1, false).
@@ -94,6 +109,10 @@ func main() {
 		AddItem(tview.NewBox().SetBorderPadding(1, 0, 0, 0), 1, 1, false).
 		AddItem(consoleLabel, 1, 1, false).
 		AddItem(console, 10, 1, false)
+
+	tview.Styles.PrimaryTextColor = tcell.ColorWhite
+	tview.Styles.ContrastBackgroundColor = tcell.ColorBlue
+	tview.Styles.PrimitiveBackgroundColor = tcell.ColorBlack
 
 	if err := app.SetRoot(flex, true).SetFocus(foc.GetFocus()).EnableMouse(true).Run(); err != nil {
 		log.Println(err)
