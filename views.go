@@ -10,9 +10,11 @@ func NewReadOnlyTextView(app *tview.Application, h *StringHolder) *tview.TextVie
 	w := tview.NewTextView()
 	w.SetText(h.value)
 	h.AddDependent(func(old, new string) {
-		app.QueueUpdateDraw(func() {
-			w.SetText(new)
-		})
+		if old != new {
+			app.QueueUpdateDraw(func() {
+				w.SetText(new)
+			})
+		}
 	})
 	return w
 }

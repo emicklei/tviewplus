@@ -13,20 +13,22 @@ import (
 // tail -f stderr.log
 
 type Bindings struct {
-	Name    *tviewplus.StringHolder
-	List    *tviewplus.StringListSelectionHolder
-	Choices *tviewplus.StringListSelectionHolder
-	Checked *tviewplus.BoolHolder
-	Console *tviewplus.StringHolder
+	Name     *tviewplus.StringHolder
+	List     *tviewplus.StringListSelectionHolder
+	Choices  *tviewplus.StringListSelectionHolder
+	Checked  *tviewplus.BoolHolder
+	Console  *tviewplus.StringHolder
+	Selected *tviewplus.StringHolder
 }
 
 func main() {
 	bin := &Bindings{
-		Name:    new(tviewplus.StringHolder),
-		List:    new(tviewplus.StringListSelectionHolder),
-		Choices: new(tviewplus.StringListSelectionHolder),
-		Checked: new(tviewplus.BoolHolder),
-		Console: new(tviewplus.StringHolder),
+		Name:     new(tviewplus.StringHolder),
+		List:     new(tviewplus.StringListSelectionHolder),
+		Choices:  new(tviewplus.StringListSelectionHolder),
+		Checked:  new(tviewplus.BoolHolder),
+		Console:  new(tviewplus.StringHolder),
+		Selected: new(tviewplus.StringHolder),
 	}
 
 	// initial values
@@ -43,10 +45,12 @@ func main() {
 	bin.Choices.AddSelectionChangeDependent(func(old, new tviewplus.SelectionWithIndex) {
 		bin.Console.Append(fmt.Sprintf("Dropdown selection changed from [%v] to [%v]\n", old, new))
 		bin.Name.Set(new.Value)
+		bin.Selected.Set(new.Value)
 	})
 
 	bin.List.AddSelectionChangeDependent(func(old, new tviewplus.SelectionWithIndex) {
 		bin.Console.Append(fmt.Sprintf("List selection changed from [%v] to [%v]\n", old, new))
+		bin.Selected.Set(new.Value)
 	})
 
 	bin.Checked.AddDependent(func(old, new bool) {
@@ -84,6 +88,10 @@ func main() {
 	checkbox.SetCheckedString("✓")
 	checkboxLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]Checkbox with BoolHolder")
 
+	// readonly textview
+	selection := tviewplus.NewReadOnlyTextView(app, bin.Selected)
+	selectionLabel := tview.NewTextView().SetDynamicColors(true).SetText(" [gray]ReadOnlyTextview with StringHolder")
+
 	// viewer for Console
 	console := tviewplus.NewReadOnlyTextView(app, bin.Console)
 	console.SetBorder(true).SetTitle("log")
@@ -105,6 +113,9 @@ func main() {
 		AddItem(tview.NewBox().SetBorderPadding(1, 0, 0, 0), 1, 1, false).
 		AddItem(checkboxLabel, 1, 1, false).
 		AddItem(checkbox, 1, 1, false).
+		AddItem(tview.NewBox().SetBorderPadding(1, 0, 0, 0), 1, 1, false).
+		AddItem(selectionLabel, 1, 1, false).
+		AddItem(selection, 1, 1, false).
 		AddItem(tview.NewBox().SetBorderPadding(1, 0, 0, 0), 1, 1, false).
 		AddItem(consoleLabel, 1, 1, false).
 		AddItem(console, 10, 1, false)
