@@ -103,6 +103,10 @@ func NewListView(f *FocusGroup, h *StringListSelectionHolder) *tview.List {
 				h.setSelection(SelectionWithIndex{Value: itemEach, Index: itemIndex})
 			})
 		}
+		// tview always selects the first ; make sure dependents know about this
+		if len(new) > 0 {
+			h.Select(0)
+		}
 		f.GetApplication().QueueUpdateDraw(func() {})
 	})
 	w.SetDoneFunc(func() {
